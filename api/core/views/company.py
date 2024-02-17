@@ -7,9 +7,9 @@ from rest_framework.views import APIView
 
 from rest_framework.response import Response
 
+from core.models import Company, Stock
+from core.serializers import StockSerializer
 
-
-from core.serializers import CompanySerializer
 
 
 # Создание компании
@@ -20,4 +20,28 @@ class AddCompany(APIView):
         serializer = CompanySerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class StockOfCompany(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        companies_id = request.data.get('companies', [])
+        if len(companies_id) == 0:
+            companies = Stock.objects.all()
+        else:
+            companies = Stock.objects.filter(company_id__in=companies_id)
+        print(companies)
+        serializer = StockSerializer(companies, many=True)
+        return Response(serializer.data)
+
+
+class AllCompany(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        company = Company.objects.all()
+        serializer = CompanySerializer(company, many=True)
+        return Response(serializer.data)
