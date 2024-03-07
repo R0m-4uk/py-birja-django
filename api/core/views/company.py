@@ -7,12 +7,15 @@ from rest_framework.views import APIView
 
 from rest_framework.response import Response
 
-from core.models import Company, Stock
-from core.serializers import StockSerializer
+from ..models import Company, Stock
+from ..serializers import StockSerializer
 
 
 
 # Создание компании
+from ..serializers import CompanySerializer
+
+
 class AddCompany(APIView):
     permission_classes = [permissions.AllowAny]
 
