@@ -10,5 +10,9 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ['title', 'created_at']
 
 
+class StockAdmin(admin.ModelAdmin):
+    list_display = ['company', 'cost', 'created_at']
+
+
 admin.site.register(Company, CompanyAdmin)
-admin.site.register(Stock)
+admin.site.register(Stock, StockAdmin)
