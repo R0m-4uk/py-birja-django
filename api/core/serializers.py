@@ -27,6 +27,8 @@ class CompanyFullSerializer(serializers.ModelSerializer):
 
 
 class StockSerializer(serializers.ModelSerializer):
+    company = CompanySerializer()
+
     class Meta:
         model = Stock
         fields = '__all__'

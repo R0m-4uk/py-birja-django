@@ -21,8 +21,11 @@ class AddStock(APIView):
 class AllStock(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
-        stocks = Stock.objects.all()
+    def post(self, request):
+        if len(request.data) == 0:
+            stocks = Stock.objects.all()
+        else:
+            stocks = Stock.objects.filter(**request.data)
         serializer = StockSerializer(stocks, many=True)
         return Response(serializer.data)
 
