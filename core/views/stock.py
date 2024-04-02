@@ -11,6 +11,7 @@ class AddStock(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        print(request.data)
         serializer = StockSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
