@@ -4,14 +4,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Stock, Company
-from ..serializers import StockSerializer
+from ..serializers import StockSerializer, CompanySerializer, StockAndCompanySerializer
 
 
 class AddStock(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        print(request.data)
+        # print(request.data)
         serializer = StockSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -47,14 +47,14 @@ class AddSmartStockAPIView(APIView):
 
         # Связываем акцию с компанией
         stock_data['company'] = company.pk
+        # stock_data['company'] = CompanySerializer(company).data
 
         # Сериализуем данные акции
-        stock_serializer = StockSerializer(data=stock_data)
+        stock_serializer = StockAndCompanySerializer(data=stock_data)
 
         # Проверяем валидность данных
         if stock_serializer.is_valid():
             stock_serializer.save()
             return Response(stock_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(stock_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(stock_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

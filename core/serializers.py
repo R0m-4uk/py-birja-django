@@ -12,7 +12,9 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def get_stock(self, instance):
         stocks = Stock.objects.filter(company=instance).order_by('-created_at')
-        return stocks[0].cost
+        if len(stocks):
+            return stocks[0].cost
+        return None
 
 
 class CompanyFullSerializer(serializers.ModelSerializer):
@@ -32,6 +34,13 @@ class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
         fields = '__all__'
+
+
+class StockAndCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stock
+        fields = '__all__'
+
 
 
 class StockOfCompanySerializer(serializers.ModelSerializer):
